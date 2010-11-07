@@ -13,8 +13,6 @@ app.configure(function(){
     });
 });
 
-var sw = fs.readFileSync('starwars_encoded.txt');
-
 app.get('/', function(req, res){
     res.render('index.html');
 });
