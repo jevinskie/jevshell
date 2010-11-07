@@ -6,7 +6,8 @@ var lines = require('lines');
 function _setupReader(stream, num_lines) {
     var frame_buffer = '';
     var cur_line = 0;
-    var repeat = 0;
+    var repeat = -1;
+
     stream.on('line', function (line){
         if (cur_line == 0) {
             repeat = line;
@@ -16,14 +17,15 @@ function _setupReader(stream, num_lines) {
         cur_line++;
 
         if (cur_line == num_lines) {
-            this.emit('frame', frame_buffer);
-            cur_line = 0;
+            this.emit('frame', frame_buffer, repeat);
             frame_buffer = '';
+            cur_line = 0;
+            repeat = -1;
         }
     });
 
     stream.on('end', function (){
-        this.emit('frame', frame_buffer);
+        this.emit('frame', frame_buffer, repeat);
     });
 }
 
